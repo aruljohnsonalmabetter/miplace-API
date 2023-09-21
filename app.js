@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-
+const cors = require("cors");
 
 const app = express();
 app.use(express.json());
@@ -30,12 +30,11 @@ mongoose
   .connect(process.env.DATABASE, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true
+    useCreateIndex: true,
   })
   .then(() => {
     console.log("DB CONNECTED");
   });
-
 
 //checkout api
 app.post("/api/create-checkout-session", async (req, res) => {
@@ -72,9 +71,6 @@ app.post("/api/create-checkout-session", async (req, res) => {
   console.log(products);
 });
 
-
 app.listen(PORT, () => {
-    console.log("Server Listening on PORT:",
-    {PORT} );
-  });
-
+  console.log("Server Listening on PORT:", { PORT });
+});
