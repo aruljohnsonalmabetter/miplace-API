@@ -1,15 +1,10 @@
 const express = require("express");
-<<<<<<< HEAD
 const mongoose = require("mongoose");
 
 const PORT = process.env.PORT || 5000;
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-=======
-
-
->>>>>>> 4110c6c21a5414c7b6f9b095b8286aaac02b1d5a
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
@@ -32,7 +27,6 @@ app.use(cors());
 app.use("/api", authRoutes);
 app.use("/api", userRoutes);
 
-<<<<<<< HEAD
 //DB Connection
 mongoose
   .connect(process.env.DATABASE, {
@@ -44,7 +38,6 @@ mongoose
     console.log("DB CONNECTED");
   });
 
-=======
 //checkout api
 app.post("/api/create-checkout-session", async (req, res) => {
   // console.log(req.body);
@@ -79,7 +72,6 @@ app.post("/api/create-checkout-session", async (req, res) => {
   res.json({ id: session.id });
   console.log(products);
 });
->>>>>>> 4110c6c21a5414c7b6f9b095b8286aaac02b1d5a
 
 app.listen(PORT, () => {
   console.log("Server Listening on PORT:", { PORT });
