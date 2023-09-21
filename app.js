@@ -6,8 +6,12 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
-const app = express ();
-// app.use(express.json());
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+
+
+const app = express();
+app.use(express.json());
+app.use(cors());
 
 //My routes
 const authRoutes = require("./routes/auth");
