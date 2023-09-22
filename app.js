@@ -4,10 +4,11 @@ const mongoose = require("mongoose");
 const PORT = process.env.PORT || 5000;
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+require("dotenv").config();
+const stripe = require("stripe")(
+  "sk_test_51NsnOGSICQL4cc0kKd26zffi52MP3A1zTzYklhT8P03N3vnGdGO4D2EC1qgBMn3z3kHVwWteoguEzApH2YPwgeEe00U45tZ8tU"
+);
 const cors = require("cors");
-
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-
 
 const app = express();
 app.use(express.json());
@@ -31,12 +32,11 @@ mongoose
   .connect(process.env.DATABASE, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true
+    useCreateIndex: true,
   })
   .then(() => {
     console.log("DB CONNECTED");
   });
-
 
 //checkout api
 app.post("/api/create-checkout-session", async (req, res) => {
@@ -53,12 +53,20 @@ app.post("/api/create-checkout-session", async (req, res) => {
             images: [products[0].main_photo_url],
           },
           // currencyPrice * (noOfDays + 1) * rooms
-          unit_amount: parseInt(
-            products[0].currencyPrice *
-              (products[0].noOfDays + 1) *
-              products[0].rooms *
-              100
-          ),
+          unit_amount:
+            parseInt(
+              products[0].currencyPrice *
+                (products[0].noOfDays + 1) *
+                products[0].rooms *
+                100
+            ) > 500000
+              ? 10000
+              : parseInt(
+                  products[0].currencyPrice *
+                    (products[0].noOfDays + 1) *
+                    products[0].rooms *
+                    100
+                ),
           // unit_amount: products[0].currencyPrice * 100,
         },
         quantity: 1,
@@ -73,9 +81,6 @@ app.post("/api/create-checkout-session", async (req, res) => {
   console.log(products);
 });
 
-
 app.listen(PORT, () => {
-    console.log("Server Listening on PORT:",
-    {PORT} );
-  });
-
+  console.log("Server Listening on PORT:", { PORT });
+});
