@@ -54,12 +54,20 @@ app.post("/api/create-checkout-session", async (req, res) => {
             images: [products[0].main_photo_url],
           },
           // currencyPrice * (noOfDays + 1) * rooms
-          unit_amount: parseInt(
-            products[0].currencyPrice *
-              (products[0].noOfDays + 1) *
-              products[0].rooms *
-              100
-          ),
+          unit_amount:
+            parseInt(
+              products[0].currencyPrice *
+                (products[0].noOfDays + 1) *
+                products[0].rooms *
+                100
+            ) > 500000
+              ? 10000*100
+              : parseInt(
+                  products[0].currencyPrice *
+                    (products[0].noOfDays + 1) *
+                    products[0].rooms *
+                    100
+                ),
           // unit_amount: products[0].currencyPrice * 100,
         },
         quantity: 1,
